@@ -82,7 +82,7 @@ An Example Review:
 
 ## Site map
 
-![a relative link](documentation/BusinessUseCase.png)
+![a relative link](documentation/PlacesSitemap.png)
 
 ## User Stories or Use Cases
 
@@ -92,6 +92,7 @@ Use case for users
 
 Use case for businesses
 
+![a relative link](documentation/BusinessUseCase.png)
 
 ## Research Topics
 
