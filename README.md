@@ -59,7 +59,7 @@ An Example Review:
 
 ## [Link to Commented First Draft Schema](db.mjs) 
 
-[a relative link](db.mjs)
+[db.mjs](db.mjs)
 
 ## Wireframes
 
@@ -82,13 +82,13 @@ An Example Review:
 
 ## Site map
 
-[a relative link](documentation/BusinessUseCase.png)
+![a relative link](documentation/BusinessUseCase.png)
 
 ## User Stories or Use Cases
 
 Use case for users
 
-[a relative link](documentation/UserUseCase.png)
+![a relative link](documentation/UserUseCase.png)
 
 Use case for businesses
 
@@ -106,7 +106,6 @@ Use case for businesses
 
 ## [Link to Initial Main Project File](app.mjs) 
 
-[a relative link](app.mjs)
 
 ## Annotations / References Used
 
