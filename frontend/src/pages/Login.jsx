@@ -1,28 +1,23 @@
-
 import React, { useState } from 'react';
 
 const Login = () => {
 
+const loginUser = (e) => {
+    e.preventDefault();
+    
+}
+
   return (
     <div>
       <h2>Login</h2>
-      <form >
-        <div>
-          <label>Email:</label>
-          <input />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input  />
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
+      <form onSubmit={loginUser}>
+        <label>Email:</label>
+        <input type='email' placeholder='email' />
+        <label>Password:</label>
+        <input type='password' placeholder='password' />
+        <button type='submit'>Login</button>
       </form>
-      <div>
-        <button >New User</button>
-        <button >New Business</button>
-      </div>
+
     </div>
   );
 };

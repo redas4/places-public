@@ -1,7 +1,5 @@
 import {FaSignInAlt, FaSignOutAlt, FaUser} from 'react-icons/fa'
 import {Link, useNavigate} from 'react-router-dom'
-import {useSelector, useDispatch} from 'react-redux'
-
 function Header() {
 
   return (
@@ -9,9 +7,9 @@ function Header() {
         <div className="logo">
            
         </div>
-        <ul>
-            Places
-        </ul>
+        <Link to='/'>Home</Link>
+        <Link to='/register'>Register</Link>
+        <Link to='login'>Login</Link>
     </header>
     
   )
