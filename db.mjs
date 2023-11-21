@@ -1,7 +1,7 @@
 import './app.mjs';
 import mongoose from 'mongoose';
 
-mongoose.connect(process.env.DSN);
+mongoose.connect('mongodb://localhost:/places');
 
 const User = new mongoose.Schema({
     userID: Number,
