@@ -12,7 +12,6 @@ const Login = () => {
 
     const loginUser = async (e) => {
         e.preventDefault();
-        console.log('i am being called')
         const {email, password} = data;
         try {
           const data = await axios.post('/login', {
