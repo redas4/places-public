@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
 
-export default function Register() {
+export default function ViewFriends() {
   const navigate = useNavigate();
   const [data, setData] = useState({
     name: '',

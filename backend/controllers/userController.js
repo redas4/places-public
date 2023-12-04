@@ -91,9 +91,47 @@ const getProfile = (req, res) => {
     }
 }
 
+const editProfile = async (req, res) => {
+    try {
+        const { name, email } = req.body;
+        const userId = req.user.id; // Extract user id from the authenticated token
+
+        // Additional checks if needed
+        if (!name || !email) {
+            return res.status(400).json({ error: 'Name and email are required' });
+        }
+
+        // Update user in the database
+        const updatedUser = await User.findByIdAndUpdate(userId, { name, email }, { new: true });
+
+        res.json(updatedUser);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const deleteProfile = async (req, res) => {
+    try {
+        const userId = req.user.id; // Extract user id from the authenticated token
+
+        // Delete user from the database
+        await User.findByIdAndDelete(userId);
+
+        // Optionally, you might want to clear the user's session or perform additional cleanup
+
+        res.json({ message: 'Profile deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 module.exports = {
     test,
     registerUser,
     loginUser,
-    getProfile
+    getProfile,
+    editProfile,
+    deleteProfile
 }

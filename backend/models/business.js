@@ -1,19 +1,14 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
+const businessSchema = new Schema({
     name: String,
     email: {
         type: String,
         unique: true
     },
     password: String,
-    friends: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ],
+    description: String,
     reviews: [
         {
             type: Schema.Types.ObjectId,
@@ -23,5 +18,5 @@ const userSchema = new Schema({
 });
 
 
-const UserModel = mongoose.model('User', userSchema);
-module.exports = UserModel;
+const BusinessModel = mongoose.model('Business', businessSchema);
+module.exports = BusinessModel;
