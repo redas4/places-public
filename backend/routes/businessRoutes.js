@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const { test, registerBusiness, getProfile, loginBusiness } = require('../controllers/businessController')
+const {test, registerBusiness, getBusinessProfile, editBusinessProfile, reviewsAboutMe, getAllBusinesses, getBusinessProfileByID, getBusinessReviews } = require('../controllers/businessController');
 
 
 router.use(
@@ -14,7 +14,11 @@ router.use(
 router.get('/', test)
 
 router.post('/register-business', registerBusiness)
-router.post('/login-business', loginBusiness)
-router.get('/business-profile', getProfile)
+router.post('/profile', getBusinessProfile);
+router.put('/edit-profile', editBusinessProfile);
+router.get('/reviews-about-me', reviewsAboutMe );
 
+router.get('/businesses', getAllBusinesses)
+router.get('/profile/:businessId', getBusinessProfileByID )
+router.get('/profile/:businessId/reviews', getBusinessReviews)
 module.exports = router;

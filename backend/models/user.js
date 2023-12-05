@@ -8,12 +8,6 @@ const userSchema = new Schema({
         unique: true
     },
     password: String,
-    friends: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ],
     reviews: [
         {
             type: Schema.Types.ObjectId,

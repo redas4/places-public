@@ -1,21 +1,18 @@
-const Review = require('../models/reviewModel');
+const Review = require('../models/review');
 
-const createReview = async (req, res) => {
+const addReview = async (req, res) => {
     try {
-        const { title, description, view, businessID } = req.body;
-        const userID = req.user.id; // Assuming you have user authentication middleware
-
-        // Additional checks if needed
-        if (!title || !description || !view || !businessID) {
+        const { title, description, visibility, businessId, accountId  } = req.body;
+        if (!title || !description || !visibility || !businessId) {
             return res.status(400).json({ error: 'Title, description, view, and businessID are required' });
         }
 
         const newReview = await Review.create({
             title,
             description,
-            view,
-            businessID,
-            userID,
+            view: visibility,
+            businessID: businessId,
+            userID: accountId,
         });
 
         res.json(newReview);
@@ -25,9 +22,8 @@ const createReview = async (req, res) => {
     }
 };
 
-// Other review-related functions (e.g., getReviews, editReview, deleteReview) can be added here
 
 module.exports = {
-    createReview,
+    addReview,
     // Add other functions as needed
 };

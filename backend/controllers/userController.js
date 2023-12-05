@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Business = require('../models/business')
+const Review = require('../models/review')
 const { hashPassword, comparePassword } = require('../helpers/auth');
 const jwt = require('jsonwebtoken');
 
@@ -11,11 +13,15 @@ const test = (req, res) => {
 const registerUser = async (req, res) => {
     try {
         const {name, email, password} = req.body;
-
         //check name
         if(!name){
             return res.json({
                 error: 'Name is required'
+            })
+        }
+        if(!email){
+            return res.json({
+                error: 'Email is required'
             })
         }
         //check password
@@ -25,8 +31,9 @@ const registerUser = async (req, res) => {
             })
         }
         //check email
-        const exist = await User.findOne({email})
-        if(exist){
+        const existingBusiness = await Business.findOne({email})
+        const existingUser = await User.findOne({email})
+        if(existingBusiness || existingUser){
             return res.json({
                 error: 'Email is already taken'
             })
@@ -47,63 +54,26 @@ const registerUser = async (req, res) => {
 
 }
 
-// Login Endpoint
-const loginUser = async (req, res) => {
+  
+
+const getProfile = async (req, res) => {
     try {
-        const {email, password} = req.body;
-
-        // check if user exists
-        const user = await User.findOne({email})
-        if(!user){
-            res.json({error: 'Error no user found'})
+        const accountId = req.body.accountId;
+        const user = await User.findOne({ _id: accountId });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
         }
-
-        // check if passwords match
-        const match = await comparePassword(password, user.password)
-        
-        if(match){
-            jwt.sign({email: user.email, id: user._id, name: user.name }, process.env.JWT_SECRET, {}, (err, token) => {
-                if(err) throw err;
-                res.cookie('token', token).json(user)
-            })
-        }
-        if(!match){
-            res.json({
-                error: 'Passwords do not match'
-            })
-        }
-
+        res.json(user);
     } catch (error) {
-        console.log(error)
-    }
-}
-
-const getProfile = (req, res) => {
-    const {token} = req.cookies;
-    if(token){
-        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            if(err) throw err;
-            res.json(user);
-        })
-    }
-    else{
-        res.json(null);
+        console.error('Get business profile error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 }
 
 const editProfile = async (req, res) => {
     try {
         const { name, email } = req.body;
-        const userId = req.user.id; // Extract user id from the authenticated token
-
-        // Additional checks if needed
-        if (!name || !email) {
-            return res.status(400).json({ error: 'Name and email are required' });
-        }
-
-        // Update user in the database
-        const updatedUser = await User.findByIdAndUpdate(userId, { name, email }, { new: true });
-
+        const updatedUser = await User.findByIdAndUpdate(req.body.id, { name, email }, { new: true });
         res.json(updatedUser);
     } catch (error) {
         console.error(error);
@@ -111,15 +81,20 @@ const editProfile = async (req, res) => {
     }
 };
 
+const getAllUsers = async (req, res) => {
+    try {
+      const users = await User.find({}, '_id name');
+      res.json(users);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
 const deleteProfile = async (req, res) => {
     try {
-        const userId = req.user.id; // Extract user id from the authenticated token
-
-        // Delete user from the database
+        const userId = req.user.id; 
         await User.findByIdAndDelete(userId);
-
-        // Optionally, you might want to clear the user's session or perform additional cleanup
-
         res.json({ message: 'Profile deleted successfully' });
     } catch (error) {
         console.error(error);
@@ -127,11 +102,86 @@ const deleteProfile = async (req, res) => {
     }
 };
 
+const getUserProfile = async (req, res) => {
+    try {
+      const userId = req.params.userId; 
+      const user = await User.findById(userId);
+      
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(user);
+    } catch (error) {
+      console.error('Get user profile error:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+const getUserReviews = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        console.log('User id from params', userId);
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        await user.populate({ path: 'reviews', model: 'Review', populate: { path: 'businessID', model: 'Business' } });
+
+        const publicReviews = user.reviews.filter(review => review.view === 'public');
+        const responseReviews = publicReviews.map(review => ({
+            title: review.title,
+            description: review.description,
+            businessName: review.businessID.name, 
+            date: review.date,
+        }));
+
+        res.status(200).json(responseReviews);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+const getMyReviews = async (req, res) => {
+    try {
+        const userId = req.body.accountId;
+        console.log('Here is my id:   ', userId)
+
+        const myReviews = await Review.find({ userID: userId })
+            .populate({
+                path: 'businessID',
+                select: 'name', 
+            })
+            .exec();
+        console.log('Here are my reviews:   ', myReviews)
+        res.status(200).json(myReviews);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+const getMyFriends = async (req, res) => {
+
+}
+
+
+
 module.exports = {
     test,
     registerUser,
-    loginUser,
     getProfile,
     editProfile,
-    deleteProfile
+    deleteProfile, 
+    getMyReviews,
+    getMyFriends,
+    getAllUsers,
+    getUserProfile,
+    getUserReviews
 }

@@ -11,15 +11,23 @@ export default function Register() {
     password: '',
   });
 
-  const [registrationType, setRegistrationType] = useState('user');
+  const [registrationType, setRegistrationType] = useState();
 
   const handleRegistration = async (e) => {
     e.preventDefault();
     const { name, email, password } = data;
-    const endpoint = registrationType === 'user' ? '/register-user' : '/register-business';
+    let endpoint;
+    if(registrationType === 'user'){
+      endpoint = '/users/register-user';
+    } else if (registrationType === 'business'){
+      endpoint = '/businesses/register-business';
+    } else {
+      toast.error('You must select an account type');
+      return;
+    }
 
     try {
-      const { data: responseData } = await axios.post(endpoint, { email, password});
+      const { data: responseData } = await axios.post(endpoint, { name, email, password});
       if (responseData.error) {
         toast.error(responseData.error);
       } else {
@@ -34,10 +42,14 @@ export default function Register() {
 
   return (
     <div>
+      <h2>Register</h2>
       <div>
+        <label>Please Select Account Type</label>
         <button onClick={() => setRegistrationType('user')}>User</button>
         <button onClick={() => setRegistrationType('business')}>Business</button>
         <form onSubmit={handleRegistration}>
+          <label>Name:</label>
+          <input type='name' placeholder='name' value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} />
           <label>Email:</label>
           <input type='email' placeholder='email' value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} />
           <label>Password:</label>

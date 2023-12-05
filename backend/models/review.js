@@ -6,7 +6,7 @@ const reviewSchema = new Schema({
     description: String,
     view: {
         type: String,
-        enum: ['public', 'private', 'friends'],
+        enum: ['public', 'private'],
         default: 'public',
     },
     businessID: {

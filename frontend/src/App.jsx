@@ -7,7 +7,12 @@ import Login from './pages/Login';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
 import { UserContextProvider } from '../context/userContext';
-import Dashboard from './pages/Dashboard';
+import UserHome from './pages/UserHome';
+import BusinessHome from './pages/BusinessHome'
+import MyProfile from './pages/MyProfile'
+import UserProfile from './pages/UserProfile'
+import BusinessProfile from './pages/BusinessProfile'
+import MyReviews from './pages/MyReviews'
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
@@ -19,10 +24,15 @@ function App() {
     <Header />
     <Toaster position='bottom-right' toastOptions={{duration: 2000}} />
     <Routes>
-      <Route path='/' element={<Home />} />;
-      <Route path='/register' element={<Register />} />;
-      <Route path='/login' element={<Login />} />;
-      <Route path='/dashboard' element={<Dashboard />} />
+      <Route path='/' element={<Home />} />
+      <Route path='/register' element={<Register />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/user-home' element={<UserHome />} />
+      <Route path='/business-home' element={<BusinessHome />} />
+      <Route path='/users/profile' element={<MyProfile />} />
+      <Route path="/my-reviews/:accountId" element={<MyReviews />} />
+      <Route path="/users/:userId" element={<UserProfile />} />
+      <Route path="/business/:businessId" element={<BusinessProfile />} />
     </Routes>
     </UserContextProvider>
   )

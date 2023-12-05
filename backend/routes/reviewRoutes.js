@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const { createReview } = require('../controllers/reviewController');
-const { authenticateToken } = require('../middleware/authMiddleware');
+const { addReview } = require('../controllers/reviewController');
 
 router.use(
     cors({
@@ -11,7 +10,7 @@ router.use(
     })
 );
 
-router.post('/create-review', authenticateToken, createReview);
-// Add other review-related routes as needed
+router.post('/addReview', addReview);
+
 
 module.exports = router;

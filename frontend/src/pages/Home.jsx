@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext, useEffect } from 'react';
 
-export default function Home(){
-    return (
-        <div>Home</div>
-    )
+function Home() {
+  return (
+    <div>
+      Welcome
+    </div>
+  );
 }
+
+export default Home;
