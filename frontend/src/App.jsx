@@ -14,8 +14,10 @@ import UserProfile from './pages/UserProfile'
 import BusinessProfile from './pages/BusinessProfile'
 import MyReviews from './pages/MyReviews'
 
-axios.defaults.baseURL = 'http://localhost:8000';
-axios.defaults.withCredentials = true;
+axios.defaults.baseURL = process.env.NODE_ENV === 'DEVELOPMENT'
+  ? 'http://localhost:8000'   
+  : 'https://places-public.vercel.app:8000';
+  axios.defaults.withCredentials = true;
 
 function App() {
 

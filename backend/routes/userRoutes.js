@@ -3,12 +3,6 @@ const router = express.Router();
 const cors = require('cors');
 const { test, registerUser, getProfile, editProfile, deleteProfile, getMyReviews, getMyFriends, getAllUsers, getUserProfile, getUserReviews } = require('../controllers/userController');
 
-router.use(
-    cors({
-        credentials: true,
-        origin: ['http://localhost:5173', 'https://places-public.vercel.app', 'http://72.231.28.64:5173']
-    })
-);
 
 router.get('/', test);
 

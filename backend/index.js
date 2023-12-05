@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
+dotenv.config()
 
 // db connection
 mongoose.connect(process.env.MONGO_URL)
@@ -34,5 +35,5 @@ app.use('/businesses', require('./routes/businessRoutes'));
 app.use('/reviews', require('./routes/reviewRoutes'));
 
 // Review routes
-const port = 8000;
+const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`server is running on port ${port}`));
